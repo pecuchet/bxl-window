@@ -12,6 +12,7 @@
             height: 100%;
             background: #000;
             color: #fff;
+            font: 11px/0 "Franklin Gothic Medium", "Franklin Gothic", "ITC Franklin Gothic", Arial, sans-serif;
         }
         #viewer {
             height: 100%;
@@ -31,11 +32,10 @@
             display: none;
         }
         .loading #loading {
-            display: inline-block;
+            display: inline-block !important;
         }
         #time {
             text-transform: uppercase;
-            font: 11px/0 "Franklin Gothic Medium", "Franklin Gothic", "ITC Franklin Gothic", Arial, sans-serif;
             letter-spacing: .025em;
         }
     </style>
@@ -43,7 +43,8 @@
 <body>
 <div id="viewer"></div>
 <div id="legend">
-    <span id="loading" style="display:none">loading...</span>
+    <span id="loading" style="display:none">...</span>
+    <span id="usage">(use the space bar)</span>
     <span id="time"></span>
 </div>
 <script src="script.js"></script>

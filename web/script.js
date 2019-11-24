@@ -2,21 +2,25 @@
     let elBody = d.body,
         elViewer = d.getElementById('viewer'),
         elTime = d.getElementById('time'),
+        elUsage = d.getElementById('usage'),
         imgCount = w.images.length,
         baseUri = 'http://localhost/dotburo/bxl-window/',
         shown = [];
 
-    toggleLoading();
     changeImage();
 
-    function toggleLoading() {
-        elBody.classList.toggle('loading')
-    }
-
     function changeImage() {
+        toggleLoading(1);
+
         let img = chooseImage();
-        elViewer.style.backgroundImage = `url(${img.url})`;
-        elTime.textContent = img.time
+
+        loadImage(img.url)
+            .then(() => {
+                elViewer.style.backgroundImage = `url(${img.url})`;
+                elTime.textContent = img.time;
+                toggleLoading(0);
+            })
+            .catch(() => toggleLoading(0))
     }
 
     function chooseImage() {
@@ -37,11 +41,25 @@
         };
     }
 
-    d.addEventListener('keydown', function(e) {
+    d.addEventListener('keydown', function (e) {
         if (e.key === ' ') {
             changeImage();
+            elUsage.style.display = 'none';
         }
     }, false);
+
+    function toggleLoading(state) {
+        elBody.classList[state ? 'add' : 'remove']('loading')
+    }
+
+    function loadImage(src) {
+        return new Promise((resolve, reject) => {
+            let img = new Image();
+            img.src = src;
+            img.onload = () => resolve(img);
+            img.onerror = e => reject(e);
+        })
+    }
 
     function getRandomIntInclusive(min, max) {
         min = Math.ceil(min);

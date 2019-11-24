@@ -1,0 +1,29 @@
+{
+    "name": "dotburo/bxl-window",
+    "description": "Online photography project",
+    "type": "project",
+    "require": {
+        "symfony/console": "^5.0",
+        "psr/log": "^1.1",
+        "ext-json": "*",
+        "ext-gd": "*",
+        "ext-exif": "*",
+        "nesbot/carbon": "^2.27",
+        "league/flysystem": "^1.0",
+        "vlucas/phpdotenv": "^3.6",
+        "league/flysystem-sftp": "^1.0"
+    },
+    "license": "GPL.3-0",
+    "authors": [
+        {
+            "name": "Arnaud Coolsaet",
+            "email": "code@dotburo.org"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src"
+        }
+    }
+}

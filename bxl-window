@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+<?php
+require __DIR__.'/vendor/autoload.php';
+
+use App\Process;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Sftp\SftpAdapter;
+use Symfony\Component\Console\Application;
+
+date_default_timezone_set('Europe/Brussels');
+
+(Dotenv\Dotenv::create(__DIR__))->load();
+
+$filesystem = new Filesystem(new SftpAdapter([
+    'host' => getenv('FTP_HOST'),
+    'username' => getenv('FTP_USER'),
+    'password' => getenv('FTP_PASS'),
+    'port' => 22
+]));
+
+(new Application('bxl-window', '1.0.0'))
+    ->add(new Process(__DIR__, $filesystem))
+    ->getApplication()
+    ->setDefaultCommand('process', true)
+    ->run();

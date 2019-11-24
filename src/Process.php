@@ -20,6 +20,9 @@ class Process extends Command
     const DIR_OUT = 'output';
 
     /** @var string */
+    const META_FILE = 'images-meta.json';
+
+    /** @var string */
     protected $basePath = '';
 
     /** @var ConsoleLogger */
@@ -74,6 +77,13 @@ class Process extends Command
             $progressBar->advance();
         }
 
+        $this->filesystem->put(
+            static::META_FILE,
+            file_get_contents($this->getPath('out', static::META_FILE))
+        );
+
+        $progressBar->advance();
+
         $progressBar->finish();
     }
 
@@ -117,7 +127,7 @@ class Process extends Command
 
         $meta = json_encode($meta);
 
-        return (bool)file_put_contents($this->getPath('out', 'images-meta.json'), $meta);
+        return (bool)file_put_contents($this->getPath('out', static::META_FILE), $meta);
     }
 
     protected function emptyOutputDir(): void

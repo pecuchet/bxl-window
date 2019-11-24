@@ -44,7 +44,7 @@
 <div id="viewer"></div>
 <div id="legend">
     <span id="loading" style="display:none">...</span>
-    <span id="usage">(use the space bar)</span>
+    <span id="usage"></span>
     <span id="time"></span>
 </div>
 <script src="script.js"></script>

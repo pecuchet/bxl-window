@@ -5,7 +5,10 @@
         elUsage = d.getElementById('usage'),
         imgCount = w.images.length,
         baseUri = 'http://localhost/dotburo/bxl-window/',
+        isTouch = 'ontouchstart' in w || (w.DocumentTouch && d instanceof DocumentTouch) || navigator.msMaxTouchPoints > 0,
         shown = [];
+
+    elUsage.textContent = !isTouch ? '(use the space bar)' : '(touch to change)';
 
     changeImage();
 
@@ -36,7 +39,7 @@
         shown.push(i);
 
         return {
-            url: `${baseUri}/output/${w.images[i].name}`,
+            url: `${baseUri}/${w.images[i].name}`,
             time: w.images[i].time
         };
     }
@@ -44,8 +47,13 @@
     d.addEventListener('keydown', function (e) {
         if (e.key === ' ') {
             changeImage();
-            elUsage.style.display = 'none';
+            hideUsage();
         }
+    }, false);
+
+    d.addEventListener('touchstart', function (e) {
+        changeImage();
+        hideUsage();
     }, false);
 
     function toggleLoading(state) {
@@ -65,6 +73,10 @@
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function hideUsage() {
+        elUsage.style.display = 'none';
     }
 
 })(window, document);

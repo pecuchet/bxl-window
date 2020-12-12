@@ -51,9 +51,15 @@ class Process extends Command
             LogLevel::INFO => OutputInterface::VERBOSITY_NORMAL
         ]);
 
+        $this->logger->log('info', 'Fetching remote meta data...');
+        $remoteMeta = $this->getRemoteMetaData();
+        $this->logger->log('info', 'Remote images: ' . count($remoteMeta));
+
         $this->emptyOutputDir();
 
         if ($meta = $this->processImages()) {
+            $meta = $this->mergeMetaData($remoteMeta, $meta);
+            $this->logger->log('info', 'New image count: ' . count($meta));
             $this->writeMetaDataFile($meta);
             $this->upload();
         }
@@ -121,15 +127,6 @@ class Process extends Command
         ];
     }
 
-    protected function writeMetaDataFile(array $meta): bool
-    {
-        $this->logger->log('info', 'Writing meta data...');
-
-        $meta = json_encode($meta);
-
-        return (bool)file_put_contents($this->getPath('out', static::META_FILE), $meta);
-    }
-
     protected function emptyOutputDir(): void
     {
         $this->logger->log('info', 'Emptying output dir...');
@@ -147,5 +144,35 @@ class Process extends Command
     protected function getAllImages(string $dir, string $extension = 'JPG'): array
     {
         return (array)glob($this->getPath($dir, "*.$extension"));
+    }
+
+    protected function writeMetaDataFile(array $meta): bool
+    {
+        $this->logger->log('info', 'Writing meta data...');
+
+        $meta = json_encode($meta);
+
+        return (bool)file_put_contents($this->getPath('out', static::META_FILE), $meta);
+    }
+
+    protected function getRemoteMetaData(): array
+    {
+        return json_decode($this->filesystem->read(self::META_FILE), true);
+    }
+
+    protected function mergeMetaData($remoteMeta, array $meta)
+    {
+        $meta = array_merge($remoteMeta, $meta);
+
+        usort($meta, function ($a, $b) {
+            $a = Carbon::parse($a['time'])->timestamp;
+            $b = Carbon::parse($b['time'])->timestamp;
+            if ($a == $b) {
+                return 0;
+            }
+            return ($a < $b) ? -1 : 1;
+        });
+
+        return $meta;
     }
 }

@@ -1,14 +1,22 @@
 (function (w, d) {
-    let elBody = d.body,
+    let RANDOM = false,
+        SORT_REV = false,
+        IMAGES = w.images,
+        elBody = d.body,
         elViewer = d.getElementById('viewer'),
         elTime = d.getElementById('time'),
         elUsage = d.getElementById('usage'),
-        imgCount = w.images.length,
-        baseUri = 'http://localhost/dotburo/bxl-window/',
+        imgCount = IMAGES.length,
+        baseUri = 'http://bxlwin.arnaudcoolsaet.eu/',
         isTouch = 'ontouchstart' in w || (w.DocumentTouch && d instanceof DocumentTouch) || navigator.msMaxTouchPoints > 0,
+        showIdx = -1,
         shown = [];
 
     elUsage.textContent = !isTouch ? '(use the space bar)' : '(touch to change)';
+
+    if (SORT_REV) {
+        IMAGES = IMAGES.reverse();
+    }
 
     changeImage();
 
@@ -27,10 +35,18 @@
     }
 
     function chooseImage() {
+        if (!RANDOM) {
+            showIdx++
+            return {
+                url: `${baseUri}/${IMAGES[showIdx].name}`,
+                time: IMAGES[showIdx].time
+            };
+        }
+
         let i = getRandomIntInclusive(0, imgCount - 1);
 
         if (shown.indexOf(i) > -1) {
-            if (shown.length === w.images.length) {
+            if (shown.length === IMAGES.length) {
                 shown = [];
             }
             return chooseImage();
@@ -39,8 +55,8 @@
         shown.push(i);
 
         return {
-            url: `${baseUri}/${w.images[i].name}`,
-            time: w.images[i].time
+            url: `${baseUri}/${IMAGES[i].name}`,
+            time: IMAGES[i].time
         };
     }
 

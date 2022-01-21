@@ -1,7 +1,7 @@
 {
     "name": "dotburo/bxl-window",
     "description": "Online photography project",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "homepage": "http://54.arnaudcoolsaet.eu",
     "type": "project",
     "require": {

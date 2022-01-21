@@ -7,7 +7,7 @@
         elTime = d.getElementById('time'),
         elUsage = d.getElementById('usage'),
         imgCount = IMAGES.length,
-        baseUri = 'http://bxlwin.arnaudcoolsaet.eu/',
+        baseUri = 'http://54.arnaudcoolsaet.eu/',
         isTouch = 'ontouchstart' in w || (w.DocumentTouch && d instanceof DocumentTouch) || navigator.msMaxTouchPoints > 0,
         showIdx = -1,
         shown = [];
